@@ -11,6 +11,8 @@ def handler(event, context):
 
     name, email, token = get_email_details(message)
 
+    print (name, email, token)
+
     if checktable(email):
         print("Email already sent")
     else:
@@ -31,10 +33,10 @@ def get_email_details(csvmessage):
 def checktable(emailadd):
 
     dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
+    email_table = dynamodb.Table('sent-emails')
     # table = dynamodb.Table('')
 
     response = dynamodb.get_item(
-        TableName='sent-emails',
         Key={'emailadd': emailadd})
     if 'Item' in response:
         return True
