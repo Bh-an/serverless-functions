@@ -8,7 +8,6 @@ on:
 jobs:
           
  Deploy-Lambda:
-    needs: build
     name: Code deploy
     runs-on: ubuntu-latest
 
