@@ -36,7 +36,7 @@ def checktable(emailadd):
     email_table = dynamodb.Table('sent-emails')
     # table = dynamodb.Table('')
 
-    response = dynamodb.get_item(
+    response = email_table.get_item(
         Key={'emailadd': emailadd})
     if 'Item' in response:
         return True
@@ -46,9 +46,8 @@ def checktable(emailadd):
 def update_email(emailadd):
 
     dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
-
-    response = dynamodb.put_item(
-        TableName='sent_emails',
+    email_table = dynamodb.Table('sent-emails')
+    response = email_table.put_item(
         Item={'emailadd': emailadd})
 
     # try:
