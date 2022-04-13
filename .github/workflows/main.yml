@@ -1,0 +1,97 @@
+name: Build and deploy
+
+on: 
+  push:
+    branches:
+      - main
+
+jobs:
+          
+ Deploy-Lambda:
+    needs: build
+    name: Code deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build code-deploy artifact
+        run: |
+          zip bundle.zip lambdafunction.py
+          ls -al
+
+      - name: AWS creds
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Deploy
+        uses: appleboy/lambda-action@master
+        with:
+          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_region:  ${{ secrets.AWS_REGION }}
+          function_name: verification-email-service
+          zip_file: bundle.zip
+
+
+
+
+# name: Java CI
+
+# on: 
+#   pull_request:
+#     branches:
+#       - main
+
+# jobs:
+#   build:
+#     name: java compile
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - uses: actions/checkout@v2
+#       - name: Set up JDK 1.8
+#         uses: actions/setup-java@v2
+#         with:
+#           java-version: '8.0.322+6'
+#           distribution: 'adopt'
+#       - name: Build with Maven
+#         run: mvn clean package spring-boot:repackage -DskipTests
+#       - name: publish jar
+#         uses: actions/upload-artifact@v2-preview
+#         with:
+#           name: "webserver-0.0.1-SNAPSHOT.jar"
+#           path: target/*.jar
+#       - name: publish properties
+#         uses: actions/upload-artifact@v2-preview
+#         with:
+#           name: "application.properties"
+#           path: src/main/resources/application.properties
+#       # - name: fetch artifact
+#       #   uses: actions/download-artifact@master
+#       #   with:
+#       #     name: "webserver-0.0.1-SNAPSHOT.jar"
+#       #     path: target/webserver-0.0.1-SNAPSHOT.jar
+#   packer_build:
+#     needs: build
+#     name: Packer build
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@master
+#       - name: Download artifact 1
+#         uses: actions/download-artifact@master
+#         with:
+#           name: webserver-0.0.1-SNAPSHOT.jar
+#           path: packer/webserver-0.0.1-SNAPSHOT.jar
+#       - name: Download artifact 2
+#         uses: actions/download-artifact@master
+#         with:
+#           name: application.properties
+#           path: packer/application.properties
+#       - name: Packer build
+#         uses: ExitoLab/packer_build_action_aws@v0.2.10
+#         with:
+#           templateFile: 'ami.json'
+#           workingDir: 'packer'
