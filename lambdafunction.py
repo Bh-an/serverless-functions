@@ -15,6 +15,8 @@ def handler(event, context):
 
     if checktable(email):
         print("Email already sent")
+        print("Email already sent previously")
+        print("Exiting")
     else:
         send_email(name, email, token)
         update_email(email)
