@@ -64,7 +64,7 @@ def send_email(recipientname, recipientemailid, authtoken):
 
     RECIPIENT = recipientemailid
 
-    authlink = "http://prod.applicationbhan.me/verifyemail?email=" + recipientemailid + "&token=" + authtoken
+    authlink = "http://prod.applicationbhan.me/verify?email=" + recipientemailid + "&token=" + authtoken
 
     print(authlink)
 
