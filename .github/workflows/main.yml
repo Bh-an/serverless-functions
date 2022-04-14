@@ -8,7 +8,8 @@ on:
 jobs:
           
  Deploy-Lambda:
-    name: Code deploy
+    if: github.repository == 'Bhan-CSYE6225/serverless'
+    name: Function deploy
     runs-on: ubuntu-latest
 
     steps:

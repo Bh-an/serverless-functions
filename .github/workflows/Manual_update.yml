@@ -1,4 +1,4 @@
-name: Build and deploy
+name: Manual Build and deploy
 
 on: [workflow_dispatch]
   
@@ -6,7 +6,8 @@ on: [workflow_dispatch]
 jobs:
           
  Deploy-Lambda:
-    name: Code deploy
+    
+    name: Function deploy
     runs-on: ubuntu-latest
 
     steps:
